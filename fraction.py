@@ -1,24 +1,20 @@
 from math import gcd
 
+
 class Fraction(object):
     
-    nom = None
-    denom = None
-    
     def __init__(self, nom, denom):
-        self.nom = nom 
-        self.denom = denom
+        self._nom = nom
+        self._denom = denom
         
         if self.denom == 0:
             raise ValueError("Denominator must not be zero.")
         
-        divisor = gcd(self.nom, self.denom)
-        self.nom = int(nom/divisor)
-        self.denom = int(denom/divisor)
-        
         if (self.denom < 0):
             self.denom = -1 * self.denom
             self.nom = -1 * self.nom
+
+        self.simplify()
 
     def __str__(self):
         if self.denom == 1:
@@ -47,3 +43,24 @@ class Fraction(object):
 
     def value(self):
         return self.nom/self.denom
+
+    def simplify(self):
+        divisor = gcd(self._nom, self._denom)
+        self._nom = int(self._nom / divisor)
+        self._denom = int(self._denom / divisor)
+
+    @property
+    def denom(self):
+        return self._denom
+
+    @denom.setter
+    def denom(self, value):
+        if value == 0:
+            raise ValueError("You can't divide by zero")
+
+        self._denom = int(value)
+        self.simplify()
+
+    @property
+    def nom(self):
+        return self._nom
